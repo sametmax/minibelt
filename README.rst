@@ -2,7 +2,9 @@
 One-file utility module filled with helper functions for day to day Python programming
 ***************************************************************************************
 
-This is a subset of batbelt, with only the most used features, packed in a tiny file so you can just drop it in your project and forget about it.
+This is a subset of batbelt, with only the most used features, packed in a tiny file, and Python 2.7/3.3 compatible.
+
+So, while you can `pip install minibelt`, you may just drop it in your project and forget about it.
 
 It's under zlib licence.
 
@@ -18,7 +20,7 @@ You had a get() method on dict, but not on lists or tuple. Now you do ::
     >>> get(lst, 100, default='whatever_you_want')
     'whatever_you_want'
 
-Plus, you can chain loop ups :
+Plus, you can chain look ups :
 
 This::
 
@@ -73,6 +75,7 @@ Get the first element an any iterable (not just indexable) or the first one to b
     >>> first([], default="What the one thing we say to the God of Death ?")
     'What the one thing we say to the God of Death ?'
 
+You can decide what "True" means by passing a function with the `key` parameter.
 
 Sorted Set
 ===================================================================================
@@ -91,7 +94,7 @@ Dictionaries one liners
 ===================================================================================
 
 
-I wish + was overloaded for dicts::
+I wish '+'' was overloaded for dicts::
 
     >>> dmerge({"a": 1, "b": 2}, {"b": 2, "c": 3})
     {'a': 1, 'c': 3, 'b': 2}
@@ -107,17 +110,6 @@ Sometimes you do not want to simply overwrite the values inside the original dic
     {'a': 1, 'c': 3, 'b': {'ko': 5, 'ok': 5}}
 
 
-Twisted but satisfying::
-
-    >>> dct = {'a': 2, 'b': 4, 'z': 42}
-    >>> a, b, c = unpack(dct, 'a', 'b', 'c', default=1)
-    >>> a
-    2
-    >>> b
-    4
-    >>> c
-    1
-
 And for lazy people like me ::
 
     >>> subdict({'a': 1, 'b': 2, 'c': 3}, include=('a', 'b'))
@@ -125,7 +117,8 @@ And for lazy people like me ::
     >>> subdict({'a': 1, 'b': 2, 'c': 3}, exclude=('c',))
     {'a': 1, 'b': 2}
 
-Which is quite nice when you want a dict of some local variables (like in web framework views) ::
+
+Which is quite nice when you want a dict of some local variables (like in web framework functions returning responses such as Django, Flask or Bottle) ::
 
 
     >>> def test():
@@ -200,9 +193,9 @@ You can (and probably wants) specify a starting point if you pass a relative pat
 
     add_to_pythonpath("../..", starting_point=__file__)
 
-`starting_point` can be a file path (basename will be stripped) or a directory name. If will be from there that the reltive path will be calculated.
+`starting_point` can be a file path (basename will be stripped) or a directory name. It will be from there that the relative path will be calculated.
 
-You can also choose where in the `sys.path` list the your path will be added by passing `insertion_index`, which default to the after the last existing item.
+You can also choose where in the `sys.path` list your path will be added by passing `insertion_index`, which default to after the last existing item.
 
 
 

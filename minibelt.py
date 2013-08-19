@@ -30,7 +30,7 @@ __version__ = '0.1'
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
 'to_timestamp', 'import_from_path', 'attr', 'chunks', 'window', 'dmerge',
-'get', 'unpack', 'subdict', 'first', 'first_true', 'skip_duplicates', 'sset',
+'get', 'subdict', 'first', 'first_true', 'skip_duplicates', 'sset',
 'add_to_pythonpath'
 ]
 
@@ -368,30 +368,6 @@ def get(data, *keys, **kwargs):
         return kwargs.get('default', None)
 
     return value
-
-
-def unpack(dct, *args, **kwargs):
-    """
-        Return an generator with the values for the given keys or
-        a default value.
-
-        :Example:
-
-        >>> dct = {'a': 2, 'b': 4, 'z': 42}
-        >>> a, b, c = unpack(dct, 'a', 'b', 'c', default=1)
-        >>> a
-        2
-        >>> b
-        4
-        >>> c
-        1
-
-    """
-
-    default = kwargs.get('default', None)
-
-    for key in args:
-        yield dct.get(key, default)
 
 
 
