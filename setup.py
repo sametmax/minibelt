@@ -1,5 +1,8 @@
 
-from setuptools import setup, find_packages
+try:
+    from distutils.core import setup
+except ImportError:
+    from setuptools import setup
 
 open('MANIFEST.in', 'w').write('\n'.join((
     "include *.rst",
@@ -11,12 +14,11 @@ setup(
 
     name="minibelt",
     version=__version__,
-    packages=find_packages('.'),
     author="Sam et Max",
+    py_modules=['minibelt'],
     author_email="lesametlemax@gmail.com",
     description="One-file utility module filled with helper functions for day to day Python programming",
     long_description=open('README.rst').read(),
-    include_package_data=True,
     classifiers=[
         'Programming Language :: Python',
         "Intended Audience :: Information Technology",
