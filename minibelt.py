@@ -418,6 +418,31 @@ def iget(data, value, default=None):
     return default
 
 
+def unpack(indexable, *args, **kwargs):
+    """
+        Return an generator with the values for the given keys/indices or
+        a default value.
+
+        :Example:
+
+        >>> dct = {'a': 2, 'b': 4, 'z': 42}
+        >>> a, b, c = unpack(dct, 'a', 'b', 'c', default=1)
+        >>> a
+        2
+        >>> b
+        4
+        >>> c
+        1
+        >>> list(unpack(range(5, 10), 2, 4))
+        [7, 9]
+    """
+
+    default = kwargs.get('default', None)
+
+    for key in args:
+        yield get(indexable, key, default=default)
+
+
 def skip_duplicates(iterable, key=lambda x: x):
     """
         Returns a generator that will yield all objects from iterable, skipping
