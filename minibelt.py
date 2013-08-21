@@ -397,15 +397,25 @@ def subdict(dct, include=(), exclude=()):
     return dict((k, v) for k, v in dct.iteritems() if k not in exclude)
 
 
-def first(iterable, default=None):
+
+def iget(data, value, default=None):
     """
-        Return the first item of any iterable. If the iterable is empty,
-        return the default value.
+        Same as indexing, but works with any iterable,
+        and accept a default value.
+
+        :Example:
+
+        >>> iget(xrange(10), 0)
+        0
+        >>> iget(xrange(10), 5)
+        5
+        >>> iget(xrange(10), 10000, default='wololo')
+        u'wololo'
     """
-    for x in iterable:
+
+    for x in islice(data, value, None):
         return x
     return default
-
 
 
 def skip_duplicates(iterable, key=lambda x: x):
