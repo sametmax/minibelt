@@ -30,7 +30,7 @@ __version__ = '0.1'
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
 'to_timestamp', 'import_from_path', 'attr', 'chunks', 'window', 'dmerge',
-'get', 'subdict', 'first', 'first_true', 'skip_duplicates', 'sset',
+'get', 'subdict', 'first', 'skip_duplicates', 'sset',
 'add_to_pythonpath'
 ]
 
@@ -406,25 +406,6 @@ def first(iterable, default=None):
         return x
     return default
 
-
-def first_true(iterable, key=None, default=None):
-    """
-        Return the first item of any iterable for which the key is True.
-
-        By default the key is the entire element.
-
-        If the iterable is empty, return the default value.
-    """
-    # duplicated some code to gain some perf in the most common use case
-    if key is None:
-        for x in iterable:
-            if x:
-                return x
-    else:
-        for x in iterable:
-            if key(x):
-                return x
-    return default
 
 
 def skip_duplicates(iterable, key=lambda x: x):
