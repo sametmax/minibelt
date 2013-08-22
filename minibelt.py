@@ -742,10 +742,8 @@ class Flattener(object):
         (x for x in ()).__class__,
         xrange,
         deque,
-        OrderedDict,
         dict,
         MutableSet,
-        defaultdict,
         # Sequence # warning, a string is a subclass of Sequence
     )
 
