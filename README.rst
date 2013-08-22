@@ -9,8 +9,8 @@ So, while you can `pip install minibelt`, you may just drop it in your project a
 It's under zlib licence.
 
 
-Get this nest value or a default
-=================================
+Get this value from an iterable/indexable or a default
+=======================================================
 
 You had a get() method on dict, but not on lists or tuple. Now you do ::
 
@@ -38,6 +38,16 @@ Becomes::
 And for attributes... ::
 
     devise = attr(car, 'insurance', 'expiration_date', 'timezone')
+
+You can also get values at indices on any iterable, including generators :
+
+        >>> iget(xrange(10), 0)
+        0
+        >>> iget(xrange(10), 5)
+        5
+        >>> iget(xrange(10), 10000, default='wololo')
+        u'wololo'
+
 
 
 Iteration tools missing in itertools
@@ -128,6 +138,7 @@ Which is quite nice when you want a dict of some local variables (like in web fr
     >>> test()
     {'a': 0, 'c': 2, 'b': 1, 'e': 4}
 
+This works with any indexable, not just dicts.
 
 String tools
 ===================================================================================
@@ -169,6 +180,33 @@ JSON helpers that handle date/time ::
     >>> json_loads('{"test": "timedelta(seconds=\'86401.0\')", "a": [1, 2]}')
     {u'test': datetime.timedelta(1, 1), u'a': [1, 2]}
 
+Write anything in one row to a file ::
+
+    >>> s = '/tmp/test'
+    >>> write(s, 'test', 'é', 1, ['fdjskl'])
+    >>> print open(s).read()
+    test
+    é
+    1
+    ['fdjskl']
+
+
+It will attempt decoding / encoding and casting automatically each value
+to a string.
+
+This is an utility function : its slow and doesn't consider edge cases,
+but allow to do just what you want most of the time in one line.
+
+You can optionally pass :
+
+mode : among 'a', 'w', which default to 'w'. Binary mode is forced.
+encoding : which default to utf8 and will condition decoding AND encoding
+errors : what to do when en encoding error occurs : 'replace' by default,
+        which replace faulty caracters with '?'
+
+You can pass string or unicode as *args, but if you pass strings,
+make sure you pass them with the same encoding you wish to write to
+the file.
 
 
 Import this
