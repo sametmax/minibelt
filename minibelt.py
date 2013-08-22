@@ -32,7 +32,7 @@ __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
 'to_timestamp', 'import_from_path', 'attr', 'chunks', 'window', 'dmerge',
 'get', 'subdict', 'iget', 'skip_duplicates', 'sset', 'unpack',
-'add_to_pythonpath', 'write'
+'add_to_pythonpath', 'write', 'flatten'
 ]
 
 
