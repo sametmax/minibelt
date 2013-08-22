@@ -686,3 +686,85 @@ def write(path, *args, **kwargs):
 
             f.write(line + os.linesep)
 
+
+class Flattener(object):
+    """
+        Create a flattener that you can call on a deeply nested data
+        structures to iterate over the items as it if it were a flat iterable.
+
+        The flattener returns a generator that lazily yield the items and
+        deals with up to hundred of levels of nesting (~800 on my machine,
+        and you can control it with sys.setrecursionlimit).
+
+        A default flattener named 'flatten' is available by default.
+
+        :Example:
+
+            a = []
+            for i in xrange(10):
+                a = [a, i]
+            print(a)
+
+            [[[[[[[[[[[], 0], 1], 2], 3], 4], 5], 6], 7], 8], 9]
+
+            print(list(flatten(a)))
+
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        By default, it flattens all the types listed in
+        Flattener.DEFAULT_FLATTEN_TYPES but you can pass you list via
+        flatten_types while calling a Flatener instance.
+
+        For ambigious types like dict, you can pass iterable_getters, a
+        mapping type / callback letting you define how to extract items from
+        each type.
+
+        :Example:
+
+            a = []
+            for i in xrange(2):
+                a = [a, i] + [{'a': 1., 'b': {'c': 3.}}]
+            print(a)
+
+            [[[], 0, {'a': 1.0, 'b': {'c': 3.0}}], 1, {'a': 1.0, 'b': {'c': 3.0}}]
+
+            dico_flatten = Flattener(iterable_getters={dict: lambda x: x.items()})
+
+            [0, 'a', 1.0, 'b', 'c', 3.0, 1, 'a', 1.0, 'b', 'c', 3.0]
+
+            print(list(dico_flatten(a)))
+    """
+
+    DEFAULT_FLATTEN_TYPES = (
+        list,
+        tuple,
+        set,
+        (x for x in ()).__class__,
+        xrange,
+        deque,
+        OrderedDict,
+        dict,
+        MutableSet,
+        defaultdict,
+        # Sequence # warning, a string is a subclass of Sequence
+    )
+
+
+    def __init__(self, flatten_types=None, iterable_getters={}):
+        self.flatten_types = flatten_types or self.DEFAULT_FLATTEN_TYPES
+        self.iterable_getters = iterable_getters
+
+
+    def __call__(self, iterable):
+        for e in iterable:
+            if isinstance(e, self.flatten_types):
+                if e.__class__ in self.iterable_getters:
+                    e = self.iterable_getters[e.__class__](e)
+                for f in self(e):
+                    yield f
+            else:
+                yield e
+
+
+
+flatten = Flattener()
