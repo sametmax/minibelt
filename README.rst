@@ -308,7 +308,7 @@ such as int, str or tuple.
 
 The return value of `key` MUST be hashable, which means for
 non hashable objects such as dict, set or list, you need to specify
-a a function that returns a hashable fingerprint ::
+a function that returns a hashable fingerprint ::
 
 
     >>> list(skip_duplicates(([], [], (), [1, 2], (1, 2)), lambda x: tuple(x)))

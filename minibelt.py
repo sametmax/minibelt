@@ -35,7 +35,6 @@ __all__ = [
 'add_to_pythonpath', 'write', 'flatten'
 ]
 
-
 CLASSIC_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 CLASSIC_DATETIME_PATTERN = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}'
 
@@ -46,8 +45,6 @@ except NameError:
     unicode = str
     xrange = range
 
-
-
 try:
     import unidecode
 
@@ -55,9 +52,9 @@ try:
         r"""
         Slugify a unicode string using unidecode to normalize the string.
 
-        Example:
+        :Example:
 
-            >>> slugify("Héllø Wörld")
+            >>> slugify(u"H\xe9ll\xf8 W\xc3\xb6rld")
             'hello-world'
             >>> slugify("Bonjour, tout l'monde !", separator="_")
             'bonjour_tout_lmonde'
@@ -69,22 +66,49 @@ try:
         string = string.strip().lower()
         return re.sub(r'[' + separator + '\s]+', separator, string, flags=re.U)
 
-    normalize = lambda s: unidecode.unidecode(s).decode('ascii')
+
+    def normalize(string):
+        r"""
+            Returns a new string withou non ASCII characters, trying to replace
+            them with their ASCII closest counter parts when possible.
+
+            :Example:
+
+                >>> normalize(u"H\xe9ll\xf8 W\xc3\xb6rld")
+                'Hello World'
+
+            This version use unidecode and provide enhanced results.
+        """
+        return unidecode.unidecode(string).decode('ascii')
 
 
 except ImportError:
 
     def normalize(string):
+        r"""
+            Returns a new string withou non ASCII characters, trying to replace
+            them with their ASCII closest counter parts when possible.
+
+            :Example:
+
+                >>> normalize(u"H\xe9ll\xf8 W\xc3\xb6rld")
+                'Hell World'
+
+
+            This version use unicodedata and provide limited yet
+            useful results.
+        """
         string = unicodedata.normalize('NFKD', string).encode('ascii', 'ignore')
         return string.decode('ascii')
+
 
     def slugify(string, separator=r'-'):
         r"""
         Slugify a unicode string using unicodedata to normalize the string.
 
-        Example:
+        :Example:
 
-            >>> slugify("Héllø Wörld")
+            >>> slugify(u"H\xe9ll\xf8 W\xc3\xb6rld")
             'hell-world'
             >>> slugify("Bonjour, tout l'monde !", separator="_")
             'bonjour_tout_lmonde'
@@ -639,7 +663,7 @@ def add_to_pythonpath(path, starting_point='.', insertion_index=None):
 
 
 def write(path, *args, **kwargs):
-    """
+    r"""
         Try to write to the file at `path` the values passed as `args` as lines.
 
         It will attempt decoding / encoding and casting automatically each value
@@ -651,10 +675,10 @@ def write(path, *args, **kwargs):
         :Example:
 
             s = '/tmp/test'
-            write(s, 'test', 'é', 1, ['fdjskl'])
+            write(s, 'test', '\xe9', 1, ['fdjskl'])
             print open(s).read()
             test
-            é
+            \xe9
             1
             ['fdjskl']
 
