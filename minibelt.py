@@ -44,6 +44,7 @@ try:
     unicode
 except NameError:
     unicode = str
+    xrange = range
 
 
 
@@ -137,7 +138,6 @@ class JSONEncoder(json.JSONEncoder):
             return self.timedelta_format % obj.total_seconds()
 
         return json.JSONEncoder.default(self, obj)
-
 
 
 class JSONDecoder(json.JSONDecoder):
@@ -701,7 +701,7 @@ class Flattener(object):
         :Example:
 
             a = []
-            for i in xrange(10):
+            for i in range(10):
                 a = [a, i]
             print(a)
 
@@ -722,17 +722,21 @@ class Flattener(object):
         :Example:
 
             a = []
-            for i in xrange(2):
+            for i in range(2):
                 a = [a, i] + [{'a': 1., 'b': {'c': 3.}}]
             print(a)
 
             [[[], 0, {'a': 1.0, 'b': {'c': 3.0}}], 1, {'a': 1.0, 'b': {'c': 3.0}}]
 
-            dico_flatten = Flattener(iterable_getters={dict: lambda x: x.items()})
+            new_ft = Flattener.DEFAULT_FLATTEN_TYPES + (dict,)
 
-            [0, 'a', 1.0, 'b', 'c', 3.0, 1, 'a', 1.0, 'b', 'c', 3.0]
+            dico_flatten = Flattener(flatten_types=new_ft,
+                                     iterable_getters={dict: lambda x: x.items()})
 
             print(list(dico_flatten(a)))
+
+            [0, u'a', 1.0, u'b', u'c', 3.0, 1, u'a', 1.0, u'b', u'c', 3.0]
+
     """
 
     DEFAULT_FLATTEN_TYPES = (
@@ -742,7 +746,6 @@ class Flattener(object):
         (x for x in ()).__class__,
         xrange,
         deque,
-        dict,
         MutableSet,
         # Sequence # warning, a string is a subclass of Sequence
     )
@@ -753,12 +756,46 @@ class Flattener(object):
         self.iterable_getters = iterable_getters
 
 
+    def should_flatten(self, obj):
+        """
+            Returns if the object should be flatten or not, checking if the
+            objects is an instance of type listed in DEFAULT_FLATTEN_TYPES
+            by default.
+        """
+        return isinstance(obj, self.flatten_types)
+
+
+    def transform_iterable(self, obj):
+        """
+            Apply a pre-processing to an object before iterate on it. Can
+            be useful for types such as dict on which you may want to call
+            values() or items() before iteration.
+
+            By defaut, it check if the object is an DIRECT instance (not
+            a subclass) of any key in iterable_getters, passed in __init__
+            and apply the transform.
+
+            iterable_getter should be a mapping with types as key and
+            transformation function as values, such as :
+
+            {dict: lambda x: x.items()}
+
+            iterable_getter default value is {}, making transform_iterable
+            a noop.
+        """
+        if obj.__class__ in self.iterable_getters:
+            return self.iterable_getters[obj.__class__](obj)
+        return obj
+
+
     def __call__(self, iterable):
+        """
+            Returns a generator yieling items from a deeply nested iterable
+            like it would be a flat one.
+        """
         for e in iterable:
-            if isinstance(e, self.flatten_types):
-                if e.__class__ in self.iterable_getters:
-                    e = self.iterable_getters[e.__class__](e)
-                for f in self(e):
+            if self.should_flatten(e):
+                for f in self(self.transform_iterable(e)):
                     yield f
             else:
                 yield e
