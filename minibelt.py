@@ -26,7 +26,7 @@ from collections import MutableSet, deque
 from datetime import datetime, timedelta, date, time
 
 
-__version__ = '0.1'
+__version__ = '0.1.1'
 
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
@@ -323,7 +323,7 @@ def attr(obj, *attrs, **kwargs):
     return value
 
 
-def chunks(seq, chunksize, process=iter):
+def chunks(seq, chunksize, process=tuple):
     """
         Yields items from an iterator in iterable chunks.
     """
