@@ -25,7 +25,6 @@ from itertools import islice, chain
 from collections import MutableSet, deque
 from datetime import datetime, timedelta, date, time
 
-
 __version__ = '0.1.1'
 
 __all__ = [
@@ -426,11 +425,10 @@ def subdict(dct, include=(), exclude=()):
     return dict((k, v) for k, v in dct.iteritems() if k not in exclude)
 
 
-
 def iget(data, value, default=None):
     """
         Same as indexing, but works with any iterable,
-        and accept a default value.
+        including generators, and accept a default value.
 
         :Example:
 
@@ -440,11 +438,35 @@ def iget(data, value, default=None):
         5
         >>> iget(xrange(10), 10000, default='wololo')
         u'wololo'
-    """
 
-    for x in islice(data, value, None):
-        return x
-    return default
+        It works with negative indices as well :
+
+        >>> iget(xrange(10), -3)
+        7
+        >>> iget(xrange(10), -1)
+        9
+         >>> iget(xrange(10), -10000, default='wololo')
+        u'wololo'
+
+        Remember it has to consume the generator to get its elements so be careful
+        if you need an element at the end of it, you will empty your generator.
+
+        Also if you pass an infinite generator and ask for a negative value,
+        it will hang forever. Use itertools.islice to be sure your generator
+        will be finite when in doubt.
+    """
+    if value >= 0:
+        for x in islice(data, value, None):
+            return x
+        return default
+    else:
+        value = abs(value)
+        d = deque((), value)
+        for elem in data:
+            d.append(elem)
+        if len(d) == value:
+            return d.popleft()
+        return default
 
 
 def unpack(indexable, *args, **kwargs):
