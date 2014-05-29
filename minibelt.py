@@ -25,7 +25,6 @@ from itertools import islice, chain
 from collections import MutableSet, deque
 from datetime import datetime, timedelta, date, time
 
-
 __version__ = '0.1.1'
 
 __all__ = [
@@ -269,6 +268,19 @@ def json_loads(string, datetime_pattern=None, date_pattern=None,
     return JSONDecoder(datetime_pattern, date_pattern, time_pattern,
                        timedelta_pattern, datetime_format, date_format,
                        time_format, *args, **kwargs).decode(string)
+
+
+def to_timestamp(dt):
+    """
+        Return a timestamp for the given datetime object.
+
+        Example:
+
+            >>> import datetime
+            >>> to_timestamp(datetime.datetime(2000, 1, 1, 1, 1, 1, 1))
+            946688461
+    """
+    return (dt - datetime(1970, 1, 1)).total_seconds()
 
 
 
@@ -670,6 +682,55 @@ def add_to_pythonpath(path, starting_point='.', insertion_index=None):
             sys.path.append(path)
         else:
             sys.path.insert(insertion_index, path)
+
+
+def write(path, *args, **kwargs):
+    r"""
+        Try to write to the file at `path` the values passed as `args` as lines.
+
+        It will attempt decoding / encoding and casting automatically each value
+        to a string.
+
+        This is an utility function : its slow and doesn't consider edge cases,
+        but allow to do just what you want most of the time in one line.
+
+        :Example:
+
+            s = '/tmp/test'
+            write(s, 'test', '\xe9', 1, ['fdjskl'])
+            print open(s).read()
+            test
+            \xe9
+            1
+            ['fdjskl']
+
+        You can optionally pass :
+
+        mode : among 'a', 'w', which default to 'w'. Binary mode is forced.
+        encoding : which default to utf8 and will condition decoding AND encoding
+        errors : what to do when en encoding error occurs : 'replace' by default,
+                which replace faulty caracters with '?'
+
+        You can pass string or unicode as *args, but if you pass strings,
+        make sure you pass them with the same encoding you wish to write to
+        the file.
+    """
+
+    mode = kwargs.get('mode', 'w')
+    encoding = kwargs.get('encoding', 'utf8')
+    errors = kwargs.get('encoding', 'replace')
+
+    with codecs.open(path, mode=mode, encoding=encoding, errors=errors) as f:
+
+        for line in args:
+
+            if isinstance(line, bytes):
+                line = line.decode(encoding, errors)
+
+            if not isinstance(line, unicode):
+                line = repr(line)
+
+            f.write(line + os.linesep)
 
 
 class Flattener(object):
