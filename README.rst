@@ -35,7 +35,7 @@ This::
 
 Becomes::
 
-    get(data, 'key', 0, 'other key, 1, default="value")
+    get(data, 'key', 0, 'other key', 1, default="value")
 
 
 attrs(object, \*attributes, [default])
@@ -70,6 +70,7 @@ chunks(iterable, size) and window(iterable, size)
 
 Iteration by chunk or with a sliding window::
 
+    >>> l = range(10)
     >>> for chunk in chunks(l, 3):
     ...     print list(chunk)
     ...
