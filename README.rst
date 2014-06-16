@@ -70,6 +70,7 @@ chunks(iterable, size) and window(iterable, size)
 
 Iteration by chunk or with a sliding window::
 
+    >>> l = range(10)
     >>> for chunk in chunks(l, 3):
     ...     print list(chunk)
     ...
