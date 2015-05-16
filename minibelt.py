@@ -340,10 +340,10 @@ def window(iterable, size=2):
     """
     iterable = iter(iterable)
     d = deque(islice(iterable, size), size)
-    yield d
+    yield tuple(d)
     for x in iterable:
         d.append(x)
-        yield d
+        yield tuple(d)
 
 
 def dmerge(d1, d2, merge_func=None):
