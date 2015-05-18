@@ -333,17 +333,21 @@ def chunks(seq, chunksize, process=tuple):
 
 
 
-def window(iterable, size=2):
+def window(iterable, size=2, cast=tuple):
     """
         Yields iterms by bunch of a given size, but rolling only one item
         in and out at a time when iterating.
+
+        By default, this will cast the window to a tuple before yielding it;
+        however, any function that will accept an iterable as its argument
+        is a valid target.
     """
     iterable = iter(iterable)
     d = deque(islice(iterable, size), size)
-    yield tuple(d)
+    yield cast(d)
     for x in iterable:
         d.append(x)
-        yield tuple(d)
+        yield cast(d)
 
 
 def dmerge(d1, d2, merge_func=None):
