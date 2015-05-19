@@ -35,7 +35,7 @@ This::
 
 Becomes::
 
-    get(data, 'key', 0, 'other key, 1, default="value")
+    get(data, 'key', 0, 'other key', 1, default="value")
 
 
 attrs(object, \*attributes, [default])
@@ -70,6 +70,7 @@ chunks(iterable, size) and window(iterable, size)
 
 Iteration by chunk or with a sliding window::
 
+    >>> l = range(10)
     >>> for chunk in chunks(l, 3):
     ...     print list(chunk)
     ...
@@ -164,7 +165,7 @@ Which is quite nice when you want a dict of some local variables (like in web fr
 
     >>> def test():
     ...     a, b, c, d, e = range(5)
-    ...     return subdict(locals(), exclude=('d', 'd'))
+    ...     return subdict(locals(), exclude=('d',))
     ...
     >>> test()
     {'a': 0, 'c': 2, 'b': 1, 'e': 4}
