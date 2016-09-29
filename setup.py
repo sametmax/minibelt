@@ -17,7 +17,7 @@ setup(
     py_modules=['minibelt'],
     author_email="lesametlemax@gmail.com",
     description="One-file utility module filled with helper functions for day to day Python programming",
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', 'rb').read().decode('utf-8'),
     classifiers=[
         'Programming Language :: Python',
         "Intended Audience :: Information Technology",
