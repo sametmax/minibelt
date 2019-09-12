@@ -53,7 +53,7 @@ try:
 
         :Example:
 
-            >>> slugify(u"H\xe9ll\xf8 W\xc3\xb6rld")
+            >>> slugify(u"H\xe9ll\xf8 W\xf3rld")
             'hello-world'
             >>> slugify("Bonjour, tout l'monde !", separator="_")
             'bonjour_tout_lmonde'
@@ -73,7 +73,7 @@ try:
 
             :Example:
 
-                >>> normalize(u"H\xe9ll\xf8 W\xc3\xb6rld")
+                >>> normalize(u"H\xe9ll\xf8 W\xf3rld")
                 'Hello World'
 
             This version use unidecode and provide enhanced results.
@@ -142,8 +142,7 @@ class JSONEncoder(json.JSONEncoder):
         self.date_format = date_format or self.DATE_FORMAT
         self.time_format = time_format or self.TIME_FORMAT
         self.timedelta_format = timedelta_format or self.TIMEDELTA_FORMAT
-
-        super(JSONEncoder, self).__init__(self, *args, **kwargs)
+        super(JSONEncoder, self).__init__(*args, **kwargs)
 
 
     def default(self, obj):
@@ -270,20 +269,6 @@ def json_loads(string, datetime_pattern=None, date_pattern=None,
                        time_format, *args, **kwargs).decode(string)
 
 
-def to_timestamp(dt):
-    """
-        Return a timestamp for the given datetime object.
-
-        Example:
-
-            >>> import datetime
-            >>> to_timestamp(datetime.datetime(2000, 1, 1, 1, 1, 1, 1))
-            946688461
-    """
-    return (dt - datetime(1970, 1, 1)).total_seconds()
-
-
-
 def import_from_path(path):
     """
         Import a class dynamically, given it's dotted path.
@@ -337,7 +322,7 @@ def window(iterable, size=2, cast=tuple):
         Yields iterms by bunch of a given size, but rolling only one item
         in and out at a time when iterating.
 
-        >>> list(window([1, 2, 3])
+        >>> list(window([1, 2, 3]))
         [(1, 2), (2, 3)]
 
         By default, this will cast the window to a tuple before yielding it;
@@ -443,9 +428,9 @@ def subdict(dct, include=(), exclude=()):
     """
 
     if include:
-        return dict((k, v) for k, v in dct.iteritems() if k in include)
+        return dict((k, v) for k, v in dct.items() if k in include)
 
-    return dict((k, v) for k, v in dct.iteritems() if k not in exclude)
+    return dict((k, v) for k, v in dct.items() if k not in exclude)
 
 
 def iget(data, value, default=None):
@@ -460,7 +445,7 @@ def iget(data, value, default=None):
         >>> iget(xrange(10), 5)
         5
         >>> iget(xrange(10), 10000, default='wololo')
-        u'wololo'
+        'wololo'
 
         It works with negative indices as well :
 
@@ -468,8 +453,8 @@ def iget(data, value, default=None):
         7
         >>> iget(xrange(10), -1)
         9
-         >>> iget(xrange(10), -10000, default='wololo')
-        u'wololo'
+        >>> iget(xrange(10), -10000, default='wololo')
+        'wololo'
 
         Remember it has to consume the generator to get its elements so be careful
         if you need an element at the end of it, you will empty your generator.
@@ -554,11 +539,11 @@ def skip_duplicates(iterable, key=lambda x: x):
         :Example:
 
             >>> class Test(object):
-                def __init__(self, foo='bar'):
-                    self.foo = foo
-                def __repr__(self):
-                    return "Test('%s')" % self.foo
-            ...
+            ...    def __init__(self, foo='bar'):
+            ...        self.foo = foo
+            ...    def __repr__(self):
+            ...        return "Test('%s')" % self.foo
+            
             >>> list(skip_duplicates([Test(), Test(), Test('other')]))
             [Test('bar'), Test('bar'), Test('other')]
             >>> list(skip_duplicates([Test(), Test(), Test('other')], lambda x: x.foo))
