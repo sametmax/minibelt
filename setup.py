@@ -1,13 +1,12 @@
-try:
-    from distutils.core import setup
-except ImportError:
-    from setuptools import setup
+from setuptools import setup
+
 
 open('MANIFEST.in', 'w').write('\n'.join((
     "include *.rst",
 )))
 
 from minibelt import __version__
+
 
 setup(
 
@@ -17,7 +16,7 @@ setup(
     py_modules=['minibelt'],
     author_email="lesametlemax@gmail.com",
     description="One-file utility module filled with helper functions for day to day Python programming",
-    long_description=open('README.rst', 'rb').read().decode('utf-8'),
+    long_description=open('README.rst', 'r', encoding="utf-8").read(),
     classifiers=[
         'Programming Language :: Python',
         "Intended Audience :: Information Technology",
@@ -27,4 +26,3 @@ setup(
     ],
     url="https://github.com/sametmax/minibelt"
 )
-

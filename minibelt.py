@@ -25,7 +25,7 @@ from itertools import islice, chain
 from collections import MutableSet, deque
 from datetime import datetime, timedelta, date, time
 
-__version__ = '0.1.1'
+__version__ = '0.2.0'
 
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
