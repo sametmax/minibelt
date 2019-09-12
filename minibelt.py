@@ -78,7 +78,7 @@ try:
 
             This version use unidecode and provide enhanced results.
         """
-        return unidecode.unidecode(string).decode('ascii')
+        return unidecode.unidecode(string)
 
 
 except ImportError:

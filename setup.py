@@ -23,8 +23,7 @@ setup(
         "Intended Audience :: Information Technology",
         "License :: OSI Approved :: zlib/libpng License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.3"
+        "Programming Language :: Python :: 3.6"
     ],
     url="https://github.com/sametmax/minibelt"
 )
