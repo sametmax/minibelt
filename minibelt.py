@@ -25,7 +25,7 @@ from itertools import islice, chain
 from collections import MutableSet, deque
 from datetime import datetime, timedelta, date, time
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
@@ -337,7 +337,7 @@ def window(iterable, size=2, cast=tuple):
 
         >>> list(window([1, 2, 3], cast=None))
         [deque([2, 3], maxlen=2), deque([2, 3], maxlen=2)]
-        
+
     """
     iterable = iter(iterable)
     d = deque(islice(iterable, size), size)
@@ -543,7 +543,7 @@ def skip_duplicates(iterable, key=lambda x: x):
             ...        self.foo = foo
             ...    def __repr__(self):
             ...        return "Test('%s')" % self.foo
-            
+
             >>> list(skip_duplicates([Test(), Test(), Test('other')]))
             [Test('bar'), Test('bar'), Test('other')]
             >>> list(skip_duplicates([Test(), Test(), Test('other')], lambda x: x.foo))
