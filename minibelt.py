@@ -22,8 +22,14 @@ import unicodedata
 import codecs
 
 from itertools import islice, chain
-from collections import MutableSet, deque
+from collections import deque
 from datetime import datetime, timedelta, date, time
+
+try:
+    from collections.abc import MutableSet
+except ImportError:
+    from collections import MutableSet
+
 
 __version__ = '0.2.1'
 
