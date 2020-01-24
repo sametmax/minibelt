@@ -31,4 +31,4 @@ MANIFEST.in
 content
 *.sublime-project
 *.sublime-workspace
-
+.mypy_cache

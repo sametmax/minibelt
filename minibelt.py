@@ -31,7 +31,7 @@ except ImportError:
     from collections import MutableSet
 
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 __all__ = [
 'slugify', 'normalize', 'json_dumps', 'json_loads', 'CLASSIC_DATETIME_FORMAT',
